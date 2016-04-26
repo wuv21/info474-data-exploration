@@ -15,11 +15,12 @@ $(document).ready(function() {
         var width = 960 - margin.left - margin.right;
         var height = 500 - margin.top - margin.bottom;
 
-        var selectedVac = ["3+DTaP"];
-        var selectedID = ['Alabama'];
+        var selectedVaccines = ["3+DTaP", "4+DTaP"];
+        var selectedStates = ['Alabama', 'Arkansas', 'Alaska'];
 
         var yScale;
-        var xScale;
+        var xStateScale;
+        var xVaccineScale;
 
         var svg = d3.select('#vis').append('svg').attr('width', 960).attr('height', 500);
 
@@ -34,8 +35,8 @@ $(document).ready(function() {
         function setScales(data) {
             var ids = data.map(function(d) {return d.id});
             var minY = d3.min(data, function(d) {
-                var val = d[selectedVac[0]];
-                for (var vac in selectedVac) {
+                var val = d[selectedVaccines[0]];
+                for (var vac in selectedVaccines) {
                     if (d[vac] < val) {
                         val = d[vac];
                     }
@@ -43,8 +44,8 @@ $(document).ready(function() {
                 return val;
             });
             var maxY = d3.max(data, function(d) {
-                var val = d[selectedVac[0]];
-                for (var vac in selectedVac) {
+                var val = d[selectedVaccines[0]];
+                for (var vac in selectedVaccines) {
                     if (d[vac] > val) {
                         val = d[vac];
                     }
@@ -53,7 +54,8 @@ $(document).ready(function() {
             });
 
             yScale = d3.scale.linear().range([height, 0]).domain([minY, maxY]);
-            xScale = d3.scale.ordinal().rangeBands([0, width], .2).domain(selectedVac);
+            xStateScale = d3.scale.ordinal().rangeBands([0, width],.2).domain(selectedStates);
+            xVaccineScale = d3.scale.ordinal().rangeRoundBands([0, xStateScale.rangeBand()], .2).domain(selectedVaccines);
         }
 
         function setAxes() {
@@ -62,7 +64,7 @@ $(document).ready(function() {
                 .orient('left');
 
             var xAxis = d3.svg.axis()
-                .scale(xScale)
+                .scale(xStateScale)
                 .orient('bottom');
 
             yAxisLabel.transition().duration(2000).call(yAxis);
@@ -72,6 +74,11 @@ $(document).ready(function() {
         function draw() {
             setScales(data);
             setAxes();
+
+            var state = svg.selectAll(".state")
+                .data(data).enter()
+                .append('rect')
+                .attr("width", )
         }
 
         draw();
