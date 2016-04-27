@@ -62,6 +62,14 @@ $(document).ready(function() {
             .attr('class', 'axis')
             .attr('transform', 'translate(' + margin.left + ',' + (height + margin.top) + ')');
 
+        var xAxisTitle = svg.append('text')
+            .attr('transform', 'translate(' + ((width / 2) + margin.left - 20) + ',' + (height + margin.top + (margin.bottom / 2)) + ')')
+            .text('State');
+
+        var yAxisTitle = svg.append('text')
+            .attr('transform', 'translate(' + 10 + ', ' + ((height / 2) + margin.top + margin.bottom) + ') rotate(-90)')
+            .text("Estimated Vaccine Coverage (%)");
+
         function setScales(data) {
             var minY = d3.min(data, function(d) {return d.v_value});
             var maxY = d3.max(data, function(d) {return d.v_value});
@@ -98,7 +106,7 @@ $(document).ready(function() {
                 .attr('x', function(d) {return xStateScale(d.state) + xVaccineScale(d.v_name)})
                 .attr('y', height)
                 .attr('fill', function(d) {return color(d.v_name)})
-                .attr('title', function(d) {return d.state + d.v_name});
+                .attr('title', function(d) {return d.v_name + ': ' + d.v_value + "%"});
 
             states.exit().remove();
 
@@ -109,7 +117,7 @@ $(document).ready(function() {
                 .attr('x', function(d) {return xStateScale(d.state) + xVaccineScale(d.v_name)})
                 .attr('y', function(d) {return yScale(d.v_value)})
                 .attr('fill', function(d) {return color(d.v_name)})
-                .attr('title', function(d) {return d.state + d.v_name});
+                .attr('title', function(d) {return d.v_name + '-' + d.v_value + "%"});
 
             var legend = svg.selectAll(".legend").data(selectedVaccines, function(d) {return d + Math.random()});
 
