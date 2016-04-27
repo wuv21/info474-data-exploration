@@ -86,7 +86,7 @@ $(document).ready(function() {
             .text('State');
 
         var yAxisTitle = svg.append('text')
-            .attr('transform', 'translate(' + 10 + ', ' + ((height / 2) + margin.top + margin.bottom) + ') rotate(-90)')
+            .attr('transform', 'translate(' + 12 + ', ' + ((height / 2) + margin.top + margin.bottom) + ') rotate(-90)')
             .text("Estimated Vaccine Coverage (%)");
 
         // Sets the scales from the given data
