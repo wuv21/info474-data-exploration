@@ -1,7 +1,7 @@
 # info474-data-exploration
 
 ## Visit the website
-[Link here](todo add url)
+[http://students.washington.edu/wuv21/info474/info474-data-exploration/](http://students.washington.edu/wuv21/info474/info474-data-exploration/)
 
 ## Rationale
 ### Data expression
