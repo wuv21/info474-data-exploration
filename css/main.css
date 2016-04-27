@@ -17,6 +17,10 @@ h1 {
     font-size: 44px;
 }
 
+#stateSelect {
+    overflow-y: scroll;
+}
+
 .axis line, .axis path {
     fill: none;
     stroke: #000;
