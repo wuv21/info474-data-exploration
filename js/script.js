@@ -1,12 +1,4 @@
 $(document).ready(function() {
-    //todo read data
-    //plot national line
-    //selectable by up to 3 vaccines
-    //select up to 3 states
-    //vaccine is x-axis
-    //coverage is y-axis
-    //color represents different state
-
     d3.csv('data/data.csv', function(error, data) {
         for (var i = 1; i < data.length; i++) {
             $('#stateSelect').append($('<option></option>')
@@ -24,9 +16,9 @@ $(document).ready(function() {
         $('#stateSelect').val(['Alabama', 'Alaska', 'Arizona']);
         $('#vaccineSelect').val(['3+DTaP', '4+DTaP', '3+Polio']);
 
-        var margin = {top: 50, right: 50, bottom: 100, left: 50};
+        var margin = {top: 50, right: 250, bottom: 100, left: 50};
 
-        var width = 960 - margin.left - margin.right;
+        var width = 1250 - margin.left - margin.right;
         var height = 500 - margin.top - margin.bottom;
 
         var selectedVaccines = ['3+DTaP', '4+DTaP', '3+Polio'];
@@ -56,9 +48,9 @@ $(document).ready(function() {
             });
         }
 
-        var svg = d3.select('#vis').append('svg').attr('width', 960).attr('height', 500);
+        var svg = d3.select('#vis').append('svg').attr('width', 1250).attr('height', 500);
 
-        var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.right + ")")
+        var g = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ")")
             .attr('width', width)
             .attr('height', height);
 
@@ -100,6 +92,18 @@ $(document).ready(function() {
 
             states.enter()
                 .append('rect')
+                .attr('data-toggle', 'tooltip')
+                .attr('width', xVaccineScale.rangeBand())
+                .attr('height', 0)
+                .attr('x', function(d) {return xStateScale(d.state) + xVaccineScale(d.v_name)})
+                .attr('y', height)
+                .attr('fill', function(d) {return color(d.v_name)})
+                .attr('title', function(d) {return d.state + d.v_name});
+
+            states.exit().remove();
+
+            states.transition()
+                .duration(500)
                 .attr('width', xVaccineScale.rangeBand())
                 .attr('height', function(d) {return height - yScale(d.v_value)})
                 .attr('x', function(d) {return xStateScale(d.state) + xVaccineScale(d.v_name)})
@@ -107,8 +111,31 @@ $(document).ready(function() {
                 .attr('fill', function(d) {return color(d.v_name)})
                 .attr('title', function(d) {return d.state + d.v_name});
 
+            var legend = svg.selectAll(".legend").data(selectedVaccines, function(d) {return d + Math.random()});
 
-            states.exit().remove();
+            legend.enter()
+                .append("g")
+                .attr("class", "legend")
+                .attr("transform", function(d, i) {return "translate(60," + (i) * 20 + ")";});
+
+            legend.append("rect")
+                .attr("x", width - 50)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", color);
+
+            legend.append("text")
+                .attr("x", width-30)
+                .attr("y", 15)
+                .style("text-anchor", "start")
+                .text(function(d) {return d});
+
+            legend.exit().remove()
+
+            $("rect").tooltip({
+                'container': 'body',
+                'placement': 'top'
+            });
         }
 
         $('#stateSelect').change(function() {
@@ -135,6 +162,7 @@ $(document).ready(function() {
 
         filterData();
         draw(selectedData);
+
     });
 
 

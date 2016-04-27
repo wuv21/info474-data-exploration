@@ -26,6 +26,10 @@ h1 {
     stroke: #000;
 }
 
+#vis {
+    margin-top: 1em;
+}
+
 #credits {
     padding: 1em;
     background-color: rgba(145, 170, 157, 0.1);
